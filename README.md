@@ -211,31 +211,6 @@ Contribuições são bem-vindas! Siga as etapas abaixo para contribuir:
 
 5. **Abra um Pull Request**
 
----
-
-## Referências
-
-- **Java:** [https://www.java.com/pt-BR/](https://www.java.com/pt-BR/)
-- **React:** [https://reactjs.org/](https://reactjs.org/)
-- **Docker:** [https://www.docker.com/](https://www.docker.com/)
-- **PostgreSQL:** [https://www.postgresql.org/](https://www.postgresql.org/)
-- **CSS:** [https://developer.mozilla.org/pt-BR/docs/Web/CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
-- **JavaScript:** [https://developer.mozilla.org/pt-BR/docs/Web/JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
-- **Spring Boot Documentation:** [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
-- **Jira:** [https://www.atlassian.com/software/jira](https://www.atlassian.com/software/jira)
-- **UML:** [https://www.uml.org/](https://www.uml.org/)
-- **Hibernate:** [https://hibernate.org/orm/](https://hibernate.org/orm/)
-- **Docker Compose:** [https://docs.docker.com/compose/](https://docs.docker.com/compose/)
-- **GitHub Actions:** [https://docs.github.com/en/actions](https://docs.github.com/en/actions)
-- **Swagger:** [https://swagger.io/](https://swagger.io/)
-- **Prometheus:** [https://prometheus.io/](https://prometheus.io/)
-- **Grafana:** [https://grafana.com/](https://grafana.com/)
-- **ELK Stack:** [https://www.elastic.co/what-is/elk-stack](https://www.elastic.co/what-is/elk-stack)
-- **Jest:** [https://jestjs.io/](https://jestjs.io/)
-- **React Testing Library:** [https://testing-library.com/docs/react-testing-library/intro/](https://testing-library.com/docs/react-testing-library/intro/)
-- **JUnit:** [https://junit.org/junit5/](https://junit.org/junit5/)
-- **Mockito:** [https://site.mockito.org/](https://site.mockito.org/)
-- **Cypress:** [https://www.cypress.io/](https://www.cypress.io/)
 
 ---
 
