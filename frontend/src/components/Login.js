@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const LoginPage = styled.div`
   display: flex;
   height: 100vh;
-  background-color: #ffffff;
+  background-color: #2C3E50;
 `;
 
 const LoginContainer = styled.div`

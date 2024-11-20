@@ -52,4 +52,12 @@ public class User {
     @JsonManagedReference("usuario2")
     private List<Friendship> friendshipsAsUser2;
 
+    @OneToMany(mappedBy = "remetente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("remetente")
+    private List<Invitation> sentInvitations;
+
+    @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("destinatario")
+    private List<Invitation> receivedInvitations;
+
 }

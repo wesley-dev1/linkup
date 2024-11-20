@@ -36,7 +36,7 @@ public class FriendshipService {
     }
 
     public List<Friendship> getFriendships(User user) {
-        return friendshipRepository.findByUsuario1OrUsuario2(user, user);
+        return friendshipRepository.findByStatusAndUsuario1OrStatusAndUsuario2("ACCEPTED", user, "ACCEPTED", user);
     }
 
     public Optional<Friendship> findById(Integer id) {

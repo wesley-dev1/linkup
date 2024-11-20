@@ -138,7 +138,7 @@ const Feed = () => {
     {
       id: 1,
       author: 'João Silva',
-      content: 'Este é um post de exemplo para a sua rede social.',
+      content: 'Este é um post de exemplo',
       date: '20 de novembro de 2023, 10:30',
     },
     {

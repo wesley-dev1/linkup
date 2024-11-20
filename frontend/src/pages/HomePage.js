@@ -4,6 +4,8 @@ import Feed from '../components/Feed';
 import FriendsList from '../components/FriendsList';
 import styled from 'styled-components';
 import PendingRequests from '../components/PendingRequests';
+import PendingInvitations from '../components/PendingInvitations';
+import FriendItem from '../components/FriendItem';
 
 const HomePageContainer = styled.div`
 display: flex;
@@ -45,6 +47,7 @@ const HomePage = () => {
       <MainContent>
         {/* If PendingRequests is an overlay, include it here */}
         <PendingRequests />
+        <PendingInvitations /> {/* Adicione esta linha */}
         <FeedWrapper>
           <Feed />
         </FeedWrapper>
