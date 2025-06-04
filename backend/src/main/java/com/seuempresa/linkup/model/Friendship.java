@@ -22,6 +22,9 @@ public class Friendship {
 
     private String status;
 
+    @Column(nullable = false)
+    private Boolean notified = false;
+
     @Column(name = "data_amizade")
     private LocalDate dataAmizade;
 

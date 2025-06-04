@@ -10,4 +10,7 @@ import java.util.List;
 public interface InvitationRepository extends JpaRepository<Invitation, Integer> {
     List<Invitation> findByDestinatarioAndStatus(User destinatario, String status);
     List<Invitation> findByRemetente(User remetente);
+
+    List<Invitation> findByRemetenteAndStatusNotAndNotifiedFalse(User remetente, String status);
+
 }

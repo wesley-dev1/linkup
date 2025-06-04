@@ -1,6 +1,6 @@
 
 package com.seuempresa.linkup.service;
-
+import java.util.stream.Collectors;
 import com.seuempresa.linkup.model.Invitation;
 import com.seuempresa.linkup.model.User;
 import com.seuempresa.linkup.repository.InvitationRepository;
@@ -36,5 +36,21 @@ public class InvitationService {
 
     public List<Invitation> getPendingInvitations(User user) {
         return invitationRepository.findByDestinatarioAndStatus(user, "PENDING");
+    }
+
+    public List<Invitation> getSentInvitations(User remetente) {
+        return invitationRepository.findByRemetente(remetente).stream()
+                .filter(inv -> !inv.getStatus().equals("PENDING"))
+                .collect(Collectors.toList());
+    }
+
+    public List<Invitation> getUnnotifiedResponses(User remetente) {
+        // busca no repo
+        List<Invitation> list = invitationRepository
+                .findByRemetenteAndStatusNotAndNotifiedFalse(remetente, "PENDING");
+        // marca como notificado e salva
+        list.forEach(inv -> inv.setNotified(true));
+        invitationRepository.saveAll(list);
+        return list;
     }
 }

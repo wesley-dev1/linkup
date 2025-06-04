@@ -36,7 +36,20 @@ public class FriendshipService {
     }
 
     public List<Friendship> getFriendships(User user) {
-        return friendshipRepository.findByStatusAndUsuario1OrStatusAndUsuario2("ACCEPTED", user, "ACCEPTED", user);
+        List<Friendship> list = new ArrayList<>();
+        list.addAll(friendshipRepository.findByUsuario1AndStatus(user, "ACCEPTED"));
+        list.addAll(friendshipRepository.findByUsuario2AndStatus(user, "ACCEPTED"));
+        return list;
+    }
+
+    public List<Friendship> getSentRequests(User sender) {
+        // reutiliza o método que você já possui no repositório:
+        return friendshipRepository
+                .findByStatusAndUsuario1OrStatusAndUsuario2(
+                        "ACCEPTED", sender,
+                        "ACCEPTED", sender
+                );
+        // se quiser incluir os recusados, basta filtrar ou usar outro status
     }
 
     public Optional<Friendship> findById(Integer id) {
@@ -47,4 +60,17 @@ public class FriendshipService {
         return friendshipRepository.findByUsuario2AndStatus(user, "PENDING");
     }
 
+    public List<Friendship> getAcceptedAndUnnotified(User user) {
+        // 1) busca no repositório
+        List<Friendship> list = friendshipRepository.findAcceptedAndUnnotified(user);
+
+        if (!list.isEmpty()) {
+            // 2) marca todas como notificadas
+            list.forEach(f -> f.setNotified(true));
+            // 3) persiste as mudanças em lote
+            friendshipRepository.saveAll(list);
+        }
+
+        return list;
+    }
 }

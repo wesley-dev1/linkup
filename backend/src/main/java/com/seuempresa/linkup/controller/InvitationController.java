@@ -97,6 +97,19 @@ public class InvitationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
     }
+    @GetMapping("/enviados/{userId}")
+    public ResponseEntity<?> getSentInvitations(@PathVariable Integer userId) {
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+
+        List<Invitation> sent = invitationService.getSentInvitations(userOpt.get());
+        List<InvitationDTO> dtos = sent.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
 
     private InvitationDTO convertToDTO(Invitation invitation) {
         InvitationDTO dto = new InvitationDTO();
@@ -119,4 +132,23 @@ public class InvitationController {
 
         return dto;
     }
+
+    @GetMapping("/unread/{userId}")
+    public ResponseEntity<?> getUnreadInvitations(@PathVariable Integer userId) {
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
+        }
+
+        // busca só os convites respondidos & notified=false, marcando-os como notificados
+        List<Invitation> unread = invitationService.getUnnotifiedResponses(userOpt.get());
+        List<InvitationDTO> dtos = unread.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
 }

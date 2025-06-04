@@ -27,6 +27,9 @@ public class Invitation {
     @Column(name = "justificativa_recusa")
     private String justificativaRecusa;
 
+    @Column(nullable = false)
+    private Boolean notified = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "remetente_id", nullable = false)
     @JsonBackReference("remetente")

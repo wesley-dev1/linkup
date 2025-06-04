@@ -24,70 +24,112 @@ public class FriendshipController {
     @Autowired
     private UserService userService;
 
-
     // Enviar solicitação de amizade
     @PostMapping("/solicitar")
-    public ResponseEntity<?> sendFriendRequest(@RequestParam Integer senderId, @RequestParam Integer receiverId) {
-        Optional<User> senderOptional = userService.findById(senderId);
-        Optional<User> receiverOptional = userService.findById(receiverId);
+    public ResponseEntity<?> sendFriendRequest(
+            @RequestParam Integer senderId,
+            @RequestParam Integer receiverId) {
+        Optional<User> senderOpt   = userService.findById(senderId);
+        Optional<User> receiverOpt = userService.findById(receiverId);
 
-        if (senderOptional.isPresent() && receiverOptional.isPresent()) {
-            Friendship friendship = friendshipService.sendFriendRequest(senderOptional.get(), receiverOptional.get());
+        if (senderOpt.isPresent() && receiverOpt.isPresent()) {
+            Friendship friendship = friendshipService
+                    .sendFriendRequest(senderOpt.get(), receiverOpt.get());
             return ResponseEntity.ok(friendship);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
         }
     }
 
-
-    // Obter solicitações pendentes de amizade
+    // Obter solicitações pendentes de amizade (recebidas)
     @GetMapping("/pendentes/{userId}")
     public ResponseEntity<?> getPendingFriendRequests(@PathVariable Integer userId) {
-        Optional<User> userOptional = userService.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            List<Friendship> pendingRequests = friendshipService.getPendingRequests(user);
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isPresent()) {
+            List<Friendship> pending = friendshipService
+                    .getPendingRequests(userOpt.get());
 
-            // Converte para DTO
-            List<FriendshipDTO> pendingRequestsDTO = pendingRequests.stream()
+            List<FriendshipDTO> dto = pending.stream()
                     .map(FriendshipDTO::new)
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok(pendingRequestsDTO);
+            return ResponseEntity.ok(dto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
+        }
+    }
+
+    // Obter solicitações enviadas de amizade (respondidas)
+    @GetMapping("/enviados/{userId}")
+    public ResponseEntity<?> getSentFriendRequests(@PathVariable Integer userId) {
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isPresent()) {
+            List<Friendship> sent = friendshipService
+                    .getSentRequests(userOpt.get());
+
+            List<FriendshipDTO> dto = sent.stream()
+                    .map(FriendshipDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
         }
     }
 
     // Aceitar solicitação de amizade
     @PostMapping("/aceitar/{friendshipId}")
     public ResponseEntity<?> acceptFriendRequest(@PathVariable Integer friendshipId) {
-        Optional<Friendship> friendshipOptional = friendshipService.findById(friendshipId);
-        if (friendshipOptional.isPresent()) {
-            Friendship friendship = friendshipService.acceptFriendRequest(friendshipOptional.get());
-            return ResponseEntity.ok(friendship);
+        Optional<Friendship> friendshipOpt = friendshipService.findById(friendshipId);
+        if (friendshipOpt.isPresent()) {
+            Friendship updated = friendshipService
+                    .acceptFriendRequest(friendshipOpt.get());
+            return ResponseEntity.ok(updated);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação de amizade não encontrada");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Solicitação de amizade não encontrada");
         }
     }
 
-    // Obter amizades de um usuário
+    // Obter todas as amizades (já aceitas)
     @GetMapping("/usuario/{userId}")
     public ResponseEntity<?> getFriendships(@PathVariable Integer userId) {
-        Optional<User> userOptional = userService.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            List<Friendship> friendships = friendshipService.getFriendships(user);
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isPresent()) {
+            List<Friendship> friends = friendshipService
+                    .getFriendships(userOpt.get());
 
-            // Converte para FriendListDTO
-            List<FriendListDTO> friendsDTO = friendships.stream()
-                    .map(friendship -> new FriendListDTO(friendship, user.getId()))
+            List<FriendListDTO> dto = friends.stream()
+                    .map(f -> new FriendListDTO(f, userOpt.get().getId()))
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok(friendsDTO);
+            return ResponseEntity.ok(dto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
         }
     }
 
+    @GetMapping("/unread/{userId}")
+    public ResponseEntity<?> getUnreadFriendships(@PathVariable Integer userId) {
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+
+        List<Friendship> unread = friendshipService.getAcceptedAndUnnotified(userOpt.get());
+        List<FriendshipDTO> dto = unread.stream()
+                .map(FriendshipDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dto);
+    }
 }
